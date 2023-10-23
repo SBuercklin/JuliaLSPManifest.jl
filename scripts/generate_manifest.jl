@@ -7,7 +7,9 @@ rev = "main"
 relevant_submodules = mktempdir() do dir
     JLSP.clone_VSCode(dir, rev)
     submodules = JLSP.list_submodules(dir)
-    return JLSP.prune_submodules(submodules; prefix = ["scripts/packages/"], drop = ["IJuliaCore"])
+    return JLSP.prune_submodules(
+        submodules; prefix=["scripts/packages/"], drop=["IJuliaCore"]
+    )
 end
 
 Pkg.activate("@nvim-lspconfig")

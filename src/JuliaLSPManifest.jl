@@ -2,7 +2,7 @@ module JuliaLSPManifest
 
 using Git
 
-function clone_VSCode(dir, rev = "main")
+function clone_VSCode(dir, rev="main")
     run(git(["clone", "https://github.com/julia-vscode/julia-vscode", dir]))
     run(git(["checkout", rev]))
     return dir
@@ -17,7 +17,7 @@ function list_submodules(dir)
     out = Pipe()
     err = Pipe()
 
-    run(pipeline(ignorestatus(cmd), stdout=out, stderr=err))
+    run(pipeline(ignorestatus(cmd); stdout=out, stderr=err))
 
     cd(dir_old)
 
@@ -26,7 +26,7 @@ function list_submodules(dir)
 
     submod_string = String(read(out))
     submodule_pairs = map(s -> split(s, ' '), split(submod_string, '\n'))
-    
+
     filter!(sp -> length(sp) == 2, submodule_pairs)
     sha_pkg_pairs = map(submodule_pairs) do sp
         (first(sp)[2:end], last(sp))
@@ -35,7 +35,7 @@ function list_submodules(dir)
     return sha_pkg_pairs
 end
 
-function prune_submodules(submodules; prefix = ["scripts/packages/",], drop = ["IJuliaCore",])
+function prune_submodules(submodules; prefix=["scripts/packages/"], drop=["IJuliaCore"])
     relevant_submodules = filter(submodules) do sp
         _, path = sp
         !(any(p -> endswith(path, p), drop) || any(p -> !startswith(path, p), prefix))
