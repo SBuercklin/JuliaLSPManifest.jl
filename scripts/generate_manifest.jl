@@ -12,7 +12,7 @@ relevant_submodules = mktempdir() do dir
     )
 end
 
-Pkg.activate("@nvim-lspconfig")
+Pkg.activate("nvim-lspconfig"; shared = true)
 
 specs = map(relevant_submodules) do sp
     (rev, name) = sp
